@@ -1,0 +1,269 @@
+---
+title: "Assignment_3_answers"
+author: "Jasmine Catague, Daisy Ta, Mihiravi Arachchige "
+date: "21/05/2021"
+output: html_document
+---
+
+
+# PART 1
+
+# Question 1
+### Present the RNA-seq count data in a table
+Here is the downloaded file from github gene_expression2.tsv dataset containing the RNA-seq count data for two samples of interest. 
+
+Firstly, we download the file by using the download.file command and then using the destfile command to label the file in our folder. 
+
+To read the gene_expression2.tsv we can use read.table command selecting the "gene_expression.tsv" file and then using the command header=TRUE to read files with the labels in the first row. And then the command row.names is used to make the dataframe in to string vectors. 
+
+``` {r gene_expression.tsv}
+download.file ("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part1_files/gene_expression.tsv", 
+  destfile= "gene_expression.tsv")
+
+gene_exp <- read.table("gene_expression.tsv", header=TRUE, row.names=1)
+
+str(gene_exp)
+head(gene_exp)
+
+```
+
+# Question 2 
+### Create a new column for the row means.
+
+Create a new column for the means of the other columns using the rowMeans command. To create a new column use the command c(name). 
+And then present it in a table with just the first six genes by using the command [1:6,] wherein [row,col]. 
+
+```{r, question 2}
+
+head(gene_exp)
+
+mean_row<-rowMeans(gene_exp)
+head(mean_row)
+
+gene_exp$mean<-c(mean_row)
+head(gene_exp)
+
+```
+
+
+# Queston 3 
+### List the 10 genes with the highest mean expression.
+
+Firstly, we use the order command to sort the genes but this gives us the lowest to highest mean values of the genes. 
+
+So then, we can use the tail command which selects the last rows of the dataset which corresponds to the top 10 highest gene expressions.
+```{r, highest mean exp}
+
+sorted_gene_exp<-gene_exp[order(gene_exp$mean),]
+top10_genes<-row.names(tail(sorted_gene_exp,10))
+top10_genes
+  cat ("The top 10 genes with the highest mean values are", top10_genes)
+```
+
+# Question 4
+### Determine the number of genes with a mean of <10
+
+To determine the number of genes with a mean of more than 10 we can use the command sum (summary) and then select the mean value with <10. 
+Then, using cat command we can separate character strings to print them properly. 
+
+```{r, mean more than 10}
+
+number_genes <-sum(gene_exp$mean<10)
+number_genes
+cat("The number of genes with a mean of more than 10 is", number_genes)
+
+
+```
+# Question 5 
+### Make a histogram plot of the mean values 
+
+To create a histogram we can use the hist command. 
+```{r, histogram of means}
+
+hist(gene_exp$mean, main= "The histogram of the mean values of the gene expressions.", xlab="Mean values", col="yellow")
+
+```
+
+
+# Question 6 
+### Importing a .csv file 
+
+Firstly, we can download the growth_data2.csv using the download.file command and then destfile command to save the file in the folder.
+
+To read the file we can use the read.csv command and then use header=TRUE to read files with the labels in the first row. 
+Then use the stringsAsFactors=FALSE command to re-encode strings.
+```{r,growth dataset}
+download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part1_files/growth_data.csv", 
+              destfile = "growth_data2.csv")
+
+growth_data <-read.csv("growth_data2.csv", header= TRUE, stringsAsFactors =FALSE)
+
+str(growth_data)
+head(growth_data)
+
+```
+
+# Question 7
+### Calculate the mean and standard deviation of tree circumference at the start and end of the study at both sites.
+Using the mean command we can calculate the mean of the tree circumference at the start of the study in 2004. Similarly, we can use the sd command to calculate the standard deviation of the tree circumference at the start of the study in 2004.
+
+And then to calculate the tree circumference at the end of the study we can use the same commands mentioned above but selecting the 2019 datatset to calculate both mean and standard deviation at the end of the study. 
+```{r, mean and sd }
+# The mean and standard deviation of tree circumference at the start of the study in 2004 at the northeast.
+northeast <- subset(growth_data,Site== "northeast")
+head(northeast)
+str(northeast)
+mean_2004_nt <- mean(northeast$Circumf_2004_cm)
+mean_2004_nt
+cat("The mean of the tree circumference in the start of the study in 2004 at the northeast.", mean_2004_nt)
+
+sd_2004_nt <-sd(northeast$Circumf_2004_cm)
+sd_2004_nt
+cat("The standard deviation of the tree circumference in the start of the study in 2004 at the northeast.", sd_2004_nt)
+
+# The mean and standard deviation of tree circumference at the start of the study in 2004 at the southwest.
+southwest<- subset(growth_data,Site== "southwest")
+head(southwest)
+str(southwest)
+
+mean_2004_sw <- mean(southwest$Circumf_2004_cm)
+mean_2004_sw
+cat("The mean of the tree circumference in the start of the study in 2004 at the southwest.", mean_2004_sw)
+
+sd_2004_sw <-sd(southwest$Circumf_2004_cm)
+sd_2004_sw
+cat("The standard deviation of the tree circumference in the start of the study in 2004", sd_2004_sw)
+
+
+#The mean and standard deviation of tree circumference at the end of the study in 2019 at the northeast.
+mean_2019_nt <- mean(northeast$Circumf_2019_cm)
+mean_2019_nt
+cat("The mean of the tree circumference in the end of the study in 2019 at the northeast.", mean_2019_nt)
+
+sd_2019_nt <-sd(northeast$Circumf_2019_cm)
+sd_2019_nt
+cat("The standard deviation of the tree circumference in the end of the study in 2019 at the northeast.", sd_2019_nt)
+
+#The mean and standard deviation of tree circumference at the end of the study in 2019 at the southwest.
+mean_2019_sw <- mean(southwest$Circumf_2019_cm)
+mean_2019_sw
+cat("The mean of the tree circumference in the end of the study in 2019 at the southwest.", mean_2019_sw)
+
+sd_2019_sw <-sd(southwest$Circumf_2019_cm)
+sd_2019_sw
+cat("The standard deviation of the tree circumference in the end of the study in 2019 at the southwest.", sd_2019_sw)
+
+```
+
+# Question 8 
+
+### Make a boxplot of tree circumference at the start and end of the study at both sites
+To make a boxplot, we used the boxplot command and then select the values we want to plot in this case we want the circumference of the study at both sides. 
+
+We want the values from 2004 and 2014 northeast and southwest and then label them accordingly.
+```{r, boxplot of tree circumference}
+
+
+boxplot(northeast$Circumf_2004_cm, southwest$Circumf_2004_cm,northeast$Circumf_2014_cm, southwest$Circumf_2014_cm,
+        main= "The tree circumference at the start and end of the study at both sites", 
+        names=c("2004 at Northeast","2004 at Southwest",  "2014 at Northeast", "2014 at Southwest"), 
+        xlab="Year",
+        ylab="Tree Circumference (in cm)",
+        col="orange")
+```
+
+
+# Question 9
+### Calculate the mean growth over the past 10 years at each site.
+
+To calculate the mean growth over the past 10 years at each site we can use the mean command selecting only the sites northeast and southwest using 2009 and 2019 datasets.
+
+```{r, mean growth}
+
+
+#The mean growth from the past 10 years.
+
+
+growth_2009_nt <- mean(northeast$Circumf_2009_cm)
+head(growth_2009_nt)
+
+growth_2019_nt <-mean(northeast$Circumf_2019_cm)
+head(growth_2019_nt)
+
+mean_growth_nt= growth_2019_nt-growth_2009_nt
+mean_growth_nt
+
+
+growth_2009_sw <- mean(southwest$Circumf_2009_cm)
+head(growth_2009_sw)
+
+growth_2019_sw <- mean(southwest$Circumf_2019_cm)
+head(growth_2019_sw)
+
+mean_growth_sw= growth_2019_sw-growth_2009_sw
+mean_growth_sw
+
+```
+
+# Question 10
+### Use the t.test and wilcox.test functions to estimate the p-value that the 10 year growth is different at the two sites.
+
+To use the t.test command and wilcox.test to get the p-value of the 10 year growth of the tree circumference from 2009-2019 and from northeast and southwest.
+```{r, ttest}
+
+northeast$tenyear_growth_nt<-northeast$Circumf_2019_cm-northeast$Circumf_2009_cm
+head(northeast)
+
+southwest$tenyear_growth_sw<-southwest$Circumf_2019_cm-southwest$Circumf_2009_cm
+head(southwest)
+
+
+t.test(northeast$tenyear_growth_nt,southwest$tenyear_growth_sw)
+
+wilcox.test(northeast$tenyear_growth_nt,southwest$tenyear_growth_sw)
+
+```
+
+# PART 2
+## Determine the limits of BLAST
+
+# Question 1
+
+```{r, Ecoli DNA seq}
+
+
+```
+
+
+# Question2
+
+```
+```
+
+
+
+# Question 3
+
+
+```
+```
+
+
+# Question 4
+
+```
+```
+
+# Question 5
+
+
+```
+```
+
+# Question 6
+
+
+```
+```
+
+
