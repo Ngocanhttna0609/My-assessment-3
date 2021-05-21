@@ -10,4 +10,127 @@ theme: cosmo
 
 # PART 1
 
-## Question 1: Download the file “gene_expression2.tsv” which contains RNA-seq count data for two samples of interest. Read in the 
+#Question 1: 
+
+Here is the downloaded file "gene_expression" which contains RNA-seq count data for two samples of interest...... And finally, we used "str" to check that the structure is what they wanted, and then we output, the first six lines six rows using the head command.
+```{r Q1}
+# Download the file "gene_expression.tsv"
+download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part1_files/gene_expression.tsv",
+              destfile= "gene_expression.tsv")
+# Read in the file
+gene_expression <- read.table("gene_expression.tsv", header=TRUE, row.names=1)
+str(gene_expression)
+# An example of trying to access a gene by gene name
+gene_expression["ENSG00000227232", ]
+# a table of values for the frst six genes.
+gene_expression[1:6,]
+```
+
+#Question 2: Make a new column which is the mean of the other columns. Show a table of values for the first six genes.
+```{r Q2}
+# Calcualte the mean of the rows
+Col_mean <- rowMeans(gene_expression)
+# Make a new mean column
+gene_expression$mean <- c(Col_mean)
+# Show the first six genes
+gene_expression[1:6,]
+```
+#Question 3: List the 10 genes with the highest mean expression.
+```{r Q3}
+# Create sorted data frame from the ordered mean column
+sorted_gene_expression <- gene_expression[order(gene_expression$mean), ]
+# Get the 10 highest mean values. 
+top10genes <- row.names(tail(sorted_gene_expression, 10))
+top10genes
+```
+## Question 4: Determine the number of genes with a mean <10.
+
+```{r Q4}
+# Calculate the numbers of genes with a mean < 10
+number_genes <- sum(gene_expression$mean < 10)
+# Show the result
+cat("The number of genes with a mean < 10:", number_genes)
+```
+
+#Question 5: Make a histogram plot of the mean values in png format and paste it into your report.
+
+```{r Q5}
+# Make a histogram plot of the mean values
+hist(gene_expression$mean, main= "Histogram plot of the mean values", xlab= "Mean values", col="green")
+# Save the histogram in png format
+png(file="histogram.png")
+```
+#Question 6: Import this csv file into an R object. What are the column names?
+```{r Q6}
+# Download the file growth_data.csv
+download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part1_files/growth_data.csv",
+              destfile= "growth_data.csv")
+# Read in the file
+growth_data <- read.csv("growth_data.csv", header=TRUE,stringsAsFactors = FALSE)
+head(growth_data)
+# Get the column names
+colnames(growth_data)
+```
+
+#Question 7: Calculate the mean and standard deviation of tree circumference at the start and end of the study at both sites.
+```{r Q7}
+#The mean and standard deviation of tree circumference at the start (in 2004)
+mean_2004 <- mean(growth_data$Circumf_2004_cm)
+cat("Mean in 2004:", mean_2004)
+sd_2004 <- sd(growth_data$Circumf_2004_cm)
+cat("SD in 2004:", sd_2004)
+
+#The mean and standard deviation of tree circumference at the end (in 2019)
+mean_2019 <- mean(growth_data$Circumf_2019_cm)
+cat("Mean in 2019:", mean_2019)
+sd_2019 <- sd(growth_data$Circumf_2019_cm)
+cat("SD in 2019:", sd_2019)
+```
+#Question 8: Make a box plot of tree circumference at the start and end of the study at both sites.
+```{r Q8}
+# Get the tree circumference in 2004 and 20009
+x_vals <- growth_data$Circumf_2004_cm
+y_vals <- growth_data$Circumf_2019_cm
+# Make a box plot
+boxplot(x_vals, y_vals,
+main = "Box plot of tree circumference",
+names = c("2004", "2019"),
+xlab = "Year",
+ylab = "Tree circumference (cm)",
+col = "orange"
+)
+```
+
+#Question 9: Calculate the mean growth over the past 10 years at each site.
+```{r growth_data.csv}
+# Get the tree circumference values of each site
+northeast <- subset(growth_data, Site=="northeast")
+southwest <- subset(growth_data, Site=="southwest")
+# Calculate the mean values of each site over past 10 years
+na_2019 <- mean(northeast$Circumf_2019_cm)
+sw_2019 <- mean(southwest$Circumf_2019_cm)
+na_2009 <- mean(northeast$Circumf_2009_cm)
+sw_2009 <- mean(southwest$Circumf_2009_cm)
+# Calculate the mean growth of each site
+na_mean_growth <- na_2019 - na_2009
+sw_mean_growth <- sw_2019 - sw_2009
+cat("The mean growth over the past 10 years of Northeast:", na_mean_growth)
+cat("The mean growth over the past 10 years of Southwest:", sw_mean_growth)
+```
+
+#Question 10: Use the t.test and wilcox.test functions to estimate the p-value that the 10 year growth is different at the two sites.
+```{r growth_data}
+#get the growth values of each site
+na_growth <- northeast$Circumf_2019_cm - northeast$Circumf_2009_cm
+sw_growth <- southwest$Circumf_2019_cm - southwest$Circumf_2009_cm
+#run t.test
+t <- t.test(na_growth, sw_growth)
+#get p-value of t.test
+t_pvalue <- t$p.value
+cat("p-value of t.test:", t_pvalue)
+#run wilcox.test
+wilcox <- wilcox.test(na_growth, sw_growth)
+# get p-value of wilcox.test
+wilcox_pvalue <- wilcox$p.value
+cat("p-value of wilcox.test:", wilcox_pvalue)
+```
