@@ -17,14 +17,16 @@ Firstly, we download the file by using the download.file command and then using 
 To read the gene_expression2.tsv we can use read.table command selecting the "gene_expression.tsv" file and then using the command header=TRUE to read files with the labels in the first row. And then the command row.names is used to make the dataframe in to string vectors. 
 
 ``` {r gene_expression.tsv}
+# Download the file "gene_expression.tsv"
 download.file ("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part1_files/gene_expression.tsv", 
   destfile= "gene_expression.tsv")
-
+# Read in the file
 gene_exp <- read.table("gene_expression.tsv", header=TRUE, row.names=1)
-
 str(gene_exp)
-head(gene_exp)
-
+# An example of trying to access a gene by gene name
+gene_expression["ENSG00000227232", ]
+# a table of values for the frst six genes.
+gene_expression[1:6,]
 ```
 
 # Question 2 
@@ -36,13 +38,12 @@ And then present it in a table with just the first six genes by using the comman
 ```{r, question 2}
 
 head(gene_exp)
-
+# Calcualte the mean of the rows
 mean_row<-rowMeans(gene_exp)
-head(mean_row)
-
+# Make a new mean column
 gene_exp$mean<-c(mean_row)
-head(gene_exp)
-
+# Show the first six genes
+gene_exp[1:6,]
 ```
 
 
