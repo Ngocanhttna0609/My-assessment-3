@@ -54,8 +54,9 @@ Firstly, we use the order command to sort the genes but this gives us the lowest
 
 So then, we can use the tail command which selects the last rows of the dataset which corresponds to the top 10 highest gene expressions.
 ```{r, highest mean exp}
-
+# Create sorted data frame from the ordered mean column
 sorted_gene_exp<-gene_exp[order(gene_exp$mean),]
+# Get the 10 highest mean values. 
 top10_genes<-row.names(tail(sorted_gene_exp,10))
 top10_genes
   cat ("The top 10 genes with the highest mean values are", top10_genes)
@@ -68,9 +69,10 @@ To determine the number of genes with a mean of more than 10 we can use the comm
 Then, using cat command we can separate character strings to print them properly. 
 
 ```{r, mean more than 10}
-
+# Calculate the numbers of genes with a mean < 10
 number_genes <-sum(gene_exp$mean<10)
 number_genes
+# Show the result
 cat("The number of genes with a mean of more than 10 is", number_genes)
 
 
@@ -101,7 +103,8 @@ growth_data <-read.csv("growth_data2.csv", header= TRUE, stringsAsFactors =FALSE
 
 str(growth_data)
 head(growth_data)
-
+# Get the column names
+colnames(growth_data)
 ```
 
 # Question 7
@@ -154,6 +157,19 @@ sd_2019_sw <-sd(southwest$Circumf_2019_cm)
 sd_2019_sw
 cat("The standard deviation of the tree circumference in the end of the study in 2019 at the southwest.", sd_2019_sw)
 
+
+# Daisy's opinion
+#The mean and standard deviation of tree circumference at the start (in 2004)
+mean_2004 <- mean(growth_data$Circumf_2004_cm)
+cat("Mean in 2004:", mean_2004)
+sd_2004 <- sd(growth_data$Circumf_2004_cm)
+cat("SD in 2004:", sd_2004)
+
+#The mean and standard deviation of tree circumference at the end (in 2019)
+mean_2019 <- mean(growth_data$Circumf_2019_cm)
+cat("Mean in 2019:", mean_2019)
+sd_2019 <- sd(growth_data$Circumf_2019_cm)
+cat("SD in 2019:", sd_2019)
 ```
 
 # Question 8 
@@ -171,6 +187,20 @@ boxplot(northeast$Circumf_2004_cm, southwest$Circumf_2004_cm,northeast$Circumf_2
         xlab="Year",
         ylab="Tree Circumference (in cm)",
         col="orange")
+        
+ # Daisy's opinion
+ # Get the tree circumference in 2004 and 20009
+x_vals <- growth_data$Circumf_2004_cm
+y_vals <- growth_data$Circumf_2019_cm
+# Make a box plot
+boxplot(x_vals, y_vals,
+main = "Box plot of tree circumference",
+names = c("2004", "2019"),
+xlab = "Year",
+ylab = "Tree circumference (cm)",
+col = "orange"
+)
+
 ```
 
 
