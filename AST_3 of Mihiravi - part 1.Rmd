@@ -1,0 +1,206 @@
+---
+title: "Assessment 3 of Mihiravi"
+author: "Mihiravi"
+date: "21/05/2021"
+output: html_document
+---
+
+##Part 1
+
+#Question 1
+
+#Download the file “gene_expression2.tsv” which contains RNA-seq count data for two samples of interest. Read in the file, making the gene accession numbers the row names. Show a table of values for the first six genes
+
+```{r gene_expression.tsv}
+
+download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part1_files/gene_expression.tsv",
+              destfile = "gene_expression.tsv")
+gene_expression <- read.table("gene_expression.tsv",
+                              header = TRUE, 
+                              row.names = 1)
+str(gene_expression)
+head(gene_expression)
+# get rows 1-6 of all columns to appear 
+gene_expression[1:6,]
+
+```
+
+#Question 2
+
+#new column for analysing row mean values
+
+```{r new column for row means}
+
+# to find the row means
+head(gene_expression)
+row_means <- rowMeans(gene_expression)
+head(row_means)
+gene_expression$mean <- c(row_means)
+# to show only 6 rows in the table
+gene_expression[1:6,]
+
+```
+
+#Question 3
+
+#10 genes with the highest mean expression
+
+```{r highest mean expression}
+
+#bring the highest values to the top of data set by using reverse sorting
+reverse_sorted<- gene_expression[order(-gene_expression$mean),]
+#to get the 10 highest mean values
+reverse_sorted[1:10, "mean"]
+
+```
+
+
+#Question 4
+
+#number of genes with a mean <10
+```{r mean <10 number of genes}
+number_genes <- sum(gene_expression$mean <10)
+number_genes
+```
+
+
+#Question 5
+
+#histogram plot of the mean values in png format
+
+```{r histogram}
+hist (gene_expression$mean, 
+     main = "Histogram plot of the mean values of genes",
+     xlab = "Mean values",
+     col = "blue")
+
+# to save as a png format 
+png(file="Histogram plot of the mean values of genes")
+```
+
+#Question 6
+
+#downloading the growth_data.csv file
+
+```{r growth_data.csv file}
+
+download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part1_files/growth_data.csv", destfile = "growth_data.csv")
+Growth_data <- read.csv("growth_data.csv", header = TRUE, stringsAsFactors = FALSE)
+head(Growth_data)
+colnames(Growth_data)
+
+```
+
+
+#Question 7
+
+#mean and standard deviation of tree circumference at the start and end of the study at both sites
+
+```{r mean and SD  of 2004 and 2019}
+
+# for the northeast data set for 2004
+NE <- subset(Growth_data, Site== "northeast")
+head(NE)
+str(NE)
+# to find the mean of 2004 for NE
+mean_2004_NE <- mean(NE$Circumf_2004_cm)
+mean_2004_NE
+# to find the SD of 2004 for NE
+SD_2004_NE <- sd(NE$Circumf_2004_cm)
+SD_2004_NE
+
+## for the southwest data set for 2004
+SW <- subset(Growth_data, Site=="southwest")
+head(SW)
+str(SW)
+# to find the mean of 2004 for SW
+mean_2004_SW <- mean(SW$Circumf_2004_cm)
+mean_2004_SW
+# to find the SD of 2004 for SW
+SD_2004_SW <- sd(SW$Circumf_2004_cm)
+SD_2004_SW
+
+##For year 2019
+
+# for the northeast data set 
+# to find the mean of 2004 for NE
+mean_2019_NE <- mean(NE$Circumf_2019_cm)
+mean_2019_NE
+# to find the SD of 2004 for NE
+SD_2019_NE <- sd(NE$Circumf_2019_cm)
+SD_2019_NE
+
+# # for the southwest data set for 2019
+# to find the mean of 2019 for SW
+mean_2019_SW <- mean(SW$Circumf_2019_cm)
+mean_2019_SW
+#to find the SD of 2019 for SW
+SD_2019_SW <- sd(SW$Circumf_2019_cm)
+SD_2019_SW
+
+```
+
+#Question 8
+
+#box plot of tree circumference at the start and end of the study at both sites
+
+```{r box plot of tree circumference 2004,2019}
+
+boxplot(NE$Circumf_2004_cm, SW$Circumf_2004_cm, NE$Circumf_2019_cm, SW$Circumf_2019_cm,
+    names = c("North east-2004","South west-2004","North east-2019","South west-2019"),
+    ylab=("Circumference (cm)"),
+    xlab= ("Year"),
+    col = "blue",
+    main= "Tree circumference at the start and end of the study")
+
+```
+
+#Question 9
+
+#mean growth over the past 10 years at each site
+
+```{r mean growth over past 10 years}
+#for northeast site
+growth_2009_NE <- mean(NE$Circumf_2009_cm)
+head(growth_2009_NE)
+growth_2019_NE <- mean(NE$Circumf_2019_cm)
+head(growth_2019_NE)
+#mean growth in northeast site
+treegrowth_NE <- (growth_2019_NE -growth_2009_NE )
+treegrowth_NE
+
+#for southeast site
+
+growth_2019_SW <- mean(SW$Circumf_2019_cm)
+head(growth_2019_SW)
+growth_2009_SW <- mean(SW$Circumf_2009_cm)
+head(growth_2009_SW)
+#mean growth in southeast site
+treegrowth_SW <- (growth_2019_SW-growth_2009_SW)
+treegrowth_SW
+
+```
+
+#Question 10 
+
+#t.test and wilcox.test functions to estimate the p-value that the 10 year growth is di
+
+```{r t.test and wilcox.test}
+# ten year growth in Northeast
+tenyear_treegrowth_NE <- (NE$Circumf_2019_cm- NE$Circumf_2009_cm)
+tenyear_treegrowth_NE
+
+# ten year growth in Southwest
+tenyear_treegrowth_SW <-(SW$Circumf_2019_cm -SW$Circumf_2009_cm)
+tenyear_treegrowth_SW
+
+# t.test
+t.test(tenyear_treegrowth_NE,tenyear_treegrowth_SW )
+# wilcox.test
+wilcox.test (tenyear_treegrowth_NE,tenyear_treegrowth_SW)
+
+```
+
+##### Part 2
+
+
