@@ -267,8 +267,23 @@ wilcox.test(northeast$tenyear_growth_nt,southwest$tenyear_growth_sw)
 
 
 # Question2
-
-```
+We use download.file to download the sample fasta sequence. Then, we use seqinr::read.fasta to read them in. We use the command [] to choose our interest sequence (number 1). After that, we use getLength() and seqinr::GC() to determine the length and the proportion of GC bases respectively. Finally, we use cat() to show the results. 
+```{r Q2Part2}
+# Download the sample fasta sequences
+download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part2_files/sample.fa",
+              destfile = "sample.fa")
+# Read the sequences
+SEQ <- seqinr::read.fasta("sample.fa")
+str(SEQ)
+# Select one sequence
+my_seq <- SEQ[[1]]
+# The length of my selected sequence
+seqinr::getLength(my_seq)
+# The proportion of GC bases
+seqinr::GC(my_seq)
+# Show the results
+cat(" The length of my selected sequence is", seqinr::getLength(my_seq))
+cat("The proportion of GC bases is", seqinr::GC(my_seq))
 ```
 
 
