@@ -261,7 +261,25 @@ wilcox.test(northeast$tenyear_growth_nt,southwest$tenyear_growth_sw)
 # Question 1
 
 ```{r, Ecoli DNA seq}
-
+# Loading the library
+suppressPackageStartupMessages({
+  library("seqinr")
+  library("magrittr")
+  library("kableExtra")
+  library("R.utils")
+  library("rBLAST")
+  library("ape")
+  library("ORFik")
+  library("Biostrings")
+  source("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part2_files/mutblast_functions.R")
+})
+# Download the whole set of E. coli gene DNA sequences
+download.file("ftp://ftp.ensemblgenomes.org/pub/bacteria/release-42/fasta/bacteria_0_collection/escherichia_coli_str_k_12_substr_mg1655/cds/Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz",
+              destfile = "Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz")
+# Use gunzip to decompress
+R.utils::gunzip("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz", overwrite=TRUE)
+# Create a BLAST database
+makeblastdb("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa", dbtype="nucl", "-parse_seqids")
 
 ```
 
