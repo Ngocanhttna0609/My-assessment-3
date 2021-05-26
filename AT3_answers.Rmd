@@ -17,7 +17,9 @@ Firstly, we download the file by using the download.file command and then using 
 To read the gene_expression2.tsv we can use read.table command selecting the "gene_expression.tsv" file and then using the command header=TRUE to read files with the labels in the first row. And then the command row.names is used to make the dataframe in to string vectors. 
 
 ``` {r gene_expression.tsv}
-# Download the file "gene_expression.tsv"
+
+# Download the file gene_expression(.)tsv
+
 download.file ("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part1_files/gene_expression.tsv", 
   destfile= "gene_expression.tsv")
 # Read in the file
@@ -259,7 +261,7 @@ wilcox.test(northeast$tenyear_growth_nt,southwest$tenyear_growth_sw)
 ## Determine the limits of BLAST
 
 # Question 1
-
+To download the whole E.coli gene sequences we can use the download.file command. Then, we can decompress the file by using the gunzip command
 ```{r, Ecoli DNA seq}
 # Loading the library
 suppressPackageStartupMessages({
@@ -292,6 +294,7 @@ str(SEQ)
 my_seq <- SEQ[[1]]
 # The length of my selected sequence
 seqinr::getLength(my_seq)
+
 # The proportion of GC bases
 seqinr::GC(my_seq)
 # Show the results
@@ -299,7 +302,7 @@ cat(" The length of my selected sequence is", seqinr::getLength(my_seq))
 cat("The proportion of GC bases is", seqinr::GC(my_seq))
 ```
 ## Question 3
-We use myblastn_tab to perform BLAST search. Then, the str command is used to see the structure. After that, we as as.character to identify what E.coli gene my sequence matches best. There is one sequence meet the demand because this gene does not share any.....  
+We use myblastn_tab to perform BLAST search. Then, the str command is used to see the structure. After that, we as as.character to identify what E.coli gene my sequence matches best. There is one sequence meet the demand because this gene does not share any matches with any other genes in the database.
 ```{r Q3Part2}
 # Create BLAST databases and perform BLAST searches
 myblastn_tab
@@ -319,27 +322,87 @@ mutator
 tophit <- seqinr::read.fasta("sample.fa")
 tophit <- tophit[[1]]
 str(tophit)
+
 # Mutate
 tophit_mut <- mutator(myseq = tophit, nmut = 100)
-tophit_mut
+
 ## Perform pairwise alignment to prove that the mutation has worked as expected
 # Convert to biostring
 tophit_f <- DNAString(c2s(tophit))
 tophit_mut_f <- DNAString(c2s(tophit_mut))
 aln <- Biostrings::pairwiseAlignment(tophit_f,tophit_mut_f)
 pid(aln)
+
+cat("The proportion of matched identity is", pid(aln)) 
 # Get the number of mismatch
  nmismatch(aln)
 # Show the result
  cat("The number of mismatches between the original and mutated sequence is", nmismatch(aln))
 ```
 ## Question 5
+To determine the number and proportion of sites that need to be altered to prevent the BLAST search from matching the gene of origin we can 
 ```{r Q5Part2}
 
+#We need to write the blast index first
+makeblastdb(file="sample.fa", dbtype="nucl")
+
+#From the previous data we know that we have 81 mismatches so we can test with 81 mismatches
+tophit_mut<-mutator(myseq=tophit,nmut=81)
+
+res<-myblastn_tab(myseq=tophit_mut,db="sample.fa")
+res
+
+!is.null(res)
+
+cat("The result for any matches of the mutated sequence is",!is.null(res) )
+
+#Now we increase the number of mutations to see whether we can still find matches.
+tophit_mut<-mutator(myseq=tophit,nmut=200)
+
+res<-myblastn_tab(myseq=tophit_mut,db="sample.fa")
+res
+
+!is.null(res)
+
+cat("The result for any matches of the mutated sequence is",!is.null(res) )
+
+rep_mut<-function(NMUT){
+  tophit_mut<-mutator(myseq=tophit,nmut=NMUT)
+  res<-myblastn_tab(myseq=tophit_mut,db="sample.fa")
+  as.numeric(!is.null(res))
+}
+
+replicate(n=100, rep_mut(200))
+
+#The sites that we have changed for our 650bp sequence.
+n_mut_range<-c(0,30,50,80,110,140,170,200)
+
+replicator_function<-function(NMUT){
+  mean(replicate(n=100,rep_mut(NMUT)))
+}
+
+myresult<-sapply(n_mut_range, replicator_function)
+
+myresult
+```
 # Question 6
 
+Now we can construct the increasing proportion of mutated bases which reduces the ability for BLAST to match the gene origin.
+```{r, chart}
+#To create a chart we can make a scatterplot.
 
-```
+#The proportion of sites randomised from the total sequence length of 650bp
+x<-c(0,0.04,0.07,0.12,0.16,0.21,0.26,0.31)
+
+  #The proportion of successful BLASTs
+y<-c(1.00, 0.99, 0.70, 0.45, 0.19, 0.04)
+
+plot(x,y, 
+     main="The effect of increasing number of random bases in BLAST", 
+     xlab="proportion of sites randomised", 
+     ylab="proportion of succesful BLASTs")
+
+abline(lm(y~x),col="read")
 ```
 
 
