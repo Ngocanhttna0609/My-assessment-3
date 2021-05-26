@@ -268,8 +268,6 @@ suppressPackageStartupMessages({
   library("kableExtra")
   library("R.utils")
   library("rBLAST")
-  library("ape")
-  library("ORFik")
   library("Biostrings")
   source("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part2_files/mutblast_functions.R")
 })
@@ -280,10 +278,7 @@ download.file("ftp://ftp.ensemblgenomes.org/pub/bacteria/release-42/fasta/bacter
 R.utils::gunzip("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz", overwrite=TRUE)
 # Create a BLAST database
 makeblastdb("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa", dbtype="nucl", "-parse_seqids")
-
 ```
-
-
 # Question2
 We use download.file to download the sample fasta sequence. Then, we use seqinr::read.fasta to read them in. We use the command [] to choose our interest sequence (number 1). After that, we use getLength() and seqinr::GC() to determine the length and the proportion of GC bases respectively. Finally, we use cat() to show the results. 
 ```{r Q2Part2}
