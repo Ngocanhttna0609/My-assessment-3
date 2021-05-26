@@ -18,6 +18,7 @@ The purpose of this project is to develop skills in problem solving, R coding, w
 This is our assessment 3 for the SLE712 unit at Deakin University. This projects concludes two parts. 
 In part 1, we will develop skills in problem solving, R coding, work togerther as a team using Rstudio and GitHub. We are provided with two data files to work with: “gene_expression2.tsv” and “growth_data2.csv” which are available from this URL*:
 https://github.com/markziemann/SLE712_les/tree/master/bioinfo_asst3_part1_files. 
+
 In part 2, we will undertake more advanced analysis in R such as:
 * Download and unzip files
 * Perform simple manipulations and analyses with sequence data
