@@ -298,26 +298,43 @@ seqinr::GC(my_seq)
 cat(" The length of my selected sequence is", seqinr::getLength(my_seq))
 cat("The proportion of GC bases is", seqinr::GC(my_seq))
 ```
-
-
-
-# Question 3
-
-
+## Question 3
+We use myblastn_tab to perform BLAST search. Then, the str command is used to see the structure. After that, we as as.character to identify what E.coli gene my sequence matches best. There is one sequence meet the demand because this gene does not share any.....  
+```{r Q3Part2}
+# Create BLAST databases and perform BLAST searches
+myblastn_tab
+res <- myblastn_tab(myseq= my_seq, db = "Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa")
+str(res)
+#  Identify what E. coli gene my sequence matches best
+top_hits <- as.character(res$sseqid[1:3])
+top_hits
+# Show a table of the top 3 hits
+head(res, 3)[, c("qseqid", "sseqid", "pident", "evalue","bitscore")]
 ```
+## Question 4
+We use mutator() function to create mutated sequence with 100 point mutations and then compare with the original sequence by making a pairwise alignment by pairwiseAlignment from Biostrings library. Firstly, we read in my selected sequence. Then, we create a mutated copy with 100 substitutions. After that, we use DNAString() to convert to biostring. We use mmismatch() to get the number of mismatch. Finally, we show the result by using cat(). The number of mismatches between the original and mutated sequence is 80.
+```{r Q4Part2}
+mutator
+# Read in
+tophit <- seqinr::read.fasta("sample.fa")
+tophit <- tophit[[1]]
+str(tophit)
+# Mutate
+tophit_mut <- mutator(myseq = tophit, nmut = 100)
+tophit_mut
+## Perform pairwise alignment to prove that the mutation has worked as expected
+# Convert to biostring
+tophit_f <- DNAString(c2s(tophit))
+tophit_mut_f <- DNAString(c2s(tophit_mut))
+aln <- Biostrings::pairwiseAlignment(tophit_f,tophit_mut_f)
+pid(aln)
+# Get the number of mismatch
+ nmismatch(aln)
+# Show the result
+ cat("The number of mismatches between the original and mutated sequence is", nmismatch(aln))
 ```
-
-
-# Question 4
-
-```
-```
-
-# Question 5
-
-
-```
-```
+## Question 5
+```{r Q5Part2}
 
 # Question 6
 
