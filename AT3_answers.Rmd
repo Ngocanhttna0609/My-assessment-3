@@ -37,7 +37,7 @@ gene_expression[1:6,]
 Create a new column for the means of the other columns using the rowMeans command. To create a new column use the command c(name). 
 And then present it in a table with just the first six genes by using the command [1:6,] wherein [row,col]. 
 
-```{r, question 2}
+```{r, new column for row means}
 
 head(gene_exp)
 # Calcualte the mean of the rows
@@ -61,6 +61,7 @@ sorted_gene_exp<-gene_exp[order(gene_exp$mean),]
 # Get the 10 highest mean values. 
 top10_genes<-row.names(tail(sorted_gene_exp,10))
 top10_genes
+#show the result
   cat ("The top 10 genes with the highest mean values are", top10_genes)
 ```
 
@@ -216,23 +217,23 @@ To calculate the mean growth over the past 10 years at each site we can use the 
 
 #The mean growth from the past 10 years.
 
-
+#for northeast site
 growth_2009_nt <- mean(northeast$Circumf_2009_cm)
 head(growth_2009_nt)
 
 growth_2019_nt <-mean(northeast$Circumf_2019_cm)
 head(growth_2019_nt)
-
+#difference is the mean growth in northeast site
 mean_growth_nt= growth_2019_nt-growth_2009_nt
 mean_growth_nt
 
-
+#for southeast site
 growth_2009_sw <- mean(southwest$Circumf_2009_cm)
 head(growth_2009_sw)
 
 growth_2019_sw <- mean(southwest$Circumf_2019_cm)
 head(growth_2019_sw)
-
+#difference is the mean growth in southeast site
 mean_growth_sw= growth_2019_sw-growth_2009_sw
 mean_growth_sw
 
@@ -243,13 +244,12 @@ mean_growth_sw
 
 To use the t.test command and wilcox.test to get the p-value of the 10 year growth of the tree circumference from 2009-2019 and from northeast and southwest.
 ```{r, ttest}
-
+# ten year growth in Northeast
 northeast$tenyear_growth_nt<-northeast$Circumf_2019_cm-northeast$Circumf_2009_cm
 head(northeast)
-
+# ten year growth in Southwest
 southwest$tenyear_growth_sw<-southwest$Circumf_2019_cm-southwest$Circumf_2009_cm
 head(southwest)
-
 
 t.test(northeast$tenyear_growth_nt,southwest$tenyear_growth_sw)
 
