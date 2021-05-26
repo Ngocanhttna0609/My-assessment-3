@@ -10,45 +10,27 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r Question 1}
-#to process and analyse the data sequence 
-library("seqinr")
-library("rBLAST")
-library("R.utils")
 
-download.file("ftp://ftp.ensemblgenomes.org/pub/bacteria/release-42/fasta/bacteria_0_collection/escherichia_coli_str_k_12_substr_mg1655/cds/Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz", destfile = "Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz")
-
-
-gunzip("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz", overwrite = TRUE)
-unlink("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz")
-
-makeblastdb("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz", dbtype= "nuc1", "-parse_seqids")
-
-```
-
-```{r}
 suppressPackageStartupMessages({
   library("seqinr")
   library("magrittr")
   library("kableExtra")
   library("R.utils")
   library("rBLAST")
-  library("ape")
-  library("ORFik")
   library("Biostrings")
   source("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part2_files/mutblast_functions.R")
 })
 
+#to process and analyse the data sequence 
+
 download.file("ftp://ftp.ensemblgenomes.org/pub/bacteria/release-42/fasta/bacteria_0_collection/escherichia_coli_str_k_12_substr_mg1655/cds/Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz", destfile = "Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz")
 
-unlink("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz")
-gunzip("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz")
+# decopressing 
+gunzip("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz", overwrite=TRUE)
 
-makeblastdb("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz", dbtype= "nuc1", "-parse_seqids")
-
+#making blast data set
+makeblastdb("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa", dbtype="nucl", "-parse_seqids")
 ```
-
-
-
 
 
 ```{r question 2}
@@ -82,29 +64,13 @@ hits
 
 ```
 
-```{r daisy 2}
 
-# Download the sample fasta sequences
-download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part2_files/sample.fa",
-              destfile = "sample.fa")
-# Read the sequences
-SEQ <- seqinr::read.fasta("sample.fa")
-str(SEQ)
-# Select one sequence
-my_seq <- SEQ[[1]]
-# The length of my selected sequence
-seqinr::getLength(my_seq)
-# The proportion of GC bases
-seqinr::GC(my_seq)
-# Show the results
-cat(" The length of my selected sequence is", seqinr::getLength(my_seq))
-cat("The proportion of GC bases is", seqinr::GC(my_seq))
+#Question 5
+
 
 ```
 
 
-
-#Question 4
 
 
 
