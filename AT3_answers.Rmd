@@ -49,7 +49,6 @@ top10_genes
 
 ## Question 4
 To determine the number of genes with a mean of more than 10 we use the command sum() and then select the mean value with <10. Then, using cat command we can separate character strings to print them properly. 
-
 ```{r, mean}
 # Calculate the numbers of genes with a mean < 10
 number_genes <-sum(gene_exp$mean<10)
@@ -201,7 +200,7 @@ top_hits
 head(res, 3)[, c("qseqid", "sseqid", "pident", "evalue","bitscore")]
 ```
 ## Question 4
-We use mutator() function to create mutated sequence with 100 point mutations and then compare with the original sequence by making a pairwise alignment by pairwiseAlignment from Biostrings library. Firstly, we read in my selected sequence. Then, we create a mutated copy with 100 substitutions. After that, we use DNAString() to convert to biostring. We use mmismatch() to get the number of mismatch. Finally, we show the result by using cat(). The number of mismatches between the original and mutated sequence is 80.
+We use mutator() function to create mutated sequence with 100 point mutations and then compare with the original sequence by making a pairwise alignment by pairwiseAlignment from Biostrings library. Firstly, we read in my selected sequence. Then, we create a mutated copy with 100 substitutions. After that, we use DNAString() to convert to biostring. We use mmismatch() to get the number of mismatch. Finally, we show the result by using cat(). The number of mismatches between the original and mutated sequence is shown below
 ```{r Q4Part2}
 # Read in
 tophit <- seqinr::read.fasta("sample.fa")
