@@ -6,7 +6,7 @@ output: html_document
 ---
 
 
-# PART 1
+# PART 1: Importing files, data wrangling, plots and saving code on GitHub
 
 ## Question 1
 Here is the downloaded file from github gene_expression2.tsv dataset containing the RNA-seq count data for two samples of interest. Firstly, we download the file by using the download.file command and then using the destfile command to label the file in our folder. To read the gene_expression2.tsv we use read.table command selecting the "gene_expression.tsv" file and then using the command header=TRUE to read files with the labels in the first row. After that, we use [] to access a gene by a gene name. Finally, we output the first six rows using [1:6,].
@@ -109,8 +109,7 @@ col = "orange"
 
 
 ## Question 9
-To calculate the mean growth over the past 10 years at each site we can use the mean command selecting only the sites northeast and southwest using 2009 and 2019 datasets.
-
+Firstly, we get the tree circumference values of each site by using subset(). Then, we use mean command to calculate the mean values in 2009 and 2019 of each site before calculate. The mean growth over the past 10 years of Northeast and Southwest are 30.076 and 48.354 respectively.
 ```{r, mean growth}
 # Get the tree circumference values of each site
 northeast <- subset(growth_data, Site=="northeast")
@@ -128,28 +127,25 @@ cat("The mean growth over the past 10 years of Southwest is", sw_mean_growth)
 ```
 
 ## Question 10
-
-To use the t.test command and wilcox.test to get the p-value of the 10 year growth of the tree circumference from 2009-2019 and from northeast and southwest.
+We get the growth values of tree circumference on each site by using $. Then, we use t.test() and wilcox.test() to run t.test and wilcox.test before getting the p-value. We use cat() command to show the result. The p-value of t.test is 1.712524e-06 and p-value of wilcox.test is 4.6264e-06.
 ```{r, ttest}
-# ten year growth in Northeast
-northeast$tenyear_growth_nt<-northeast$Circumf_2019_cm-northeast$Circumf_2009_cm
-head(northeast)
-# ten year growth in Southwest
-southwest$tenyear_growth_sw<-southwest$Circumf_2019_cm-southwest$Circumf_2009_cm
-head(southwest)
-
-t.test(northeast$tenyear_growth_nt,southwest$tenyear_growth_sw)
-
-wilcox.test(northeast$tenyear_growth_nt,southwest$tenyear_growth_sw)
-
+#get the growth values of each site
+na_growth <- northeast$Circumf_2019_cm - northeast$Circumf_2009_cm
+sw_growth <- southwest$Circumf_2019_cm - southwest$Circumf_2009_cm
+#run t.test
+t <- t.test(na_growth, sw_growth)
+#get p-value of t.test
+t_pvalue <- t$p.value
+cat("p-value of t.test is", t_pvalue)
+#run wilcox.test
+wilcox <- wilcox.test(na_growth, sw_growth)
+# get p-value of wilcox.test
+wilcox_pvalue <- wilcox$p.value
+cat("p-value of wilcox.test is", wilcox_pvalue)
 ```
 
-# PART 2
-## Determine the limits of BLAST
-
-# Question 1
-To download the whole E.coli gene sequences we can use the download.file command. Then, we can decompress the file by using the gunzip command
-```{r, Ecoli DNA seq}
+# PART 2: Determine the limits of BLAST
+```{r loading the library}
 # Loading the library
 suppressPackageStartupMessages({
   library("seqinr")
@@ -160,6 +156,10 @@ suppressPackageStartupMessages({
   library("Biostrings")
   source("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part2_files/mutblast_functions.R")
 })
+```
+## Question 1
+We use download.file to download the whole set of E. coli gene DNA sequences and and use R.utils::gunzip to decompress. Then, we use makeblastdb() function to create a BLAST database with dbtype is nucleic. There are 4140 sequences which present in the E.coli set. 
+```{r, Ecoli DNA seq}
 # Download the whole set of E. coli gene DNA sequences
 download.file("ftp://ftp.ensemblgenomes.org/pub/bacteria/release-42/fasta/bacteria_0_collection/escherichia_coli_str_k_12_substr_mg1655/cds/Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz",
               destfile = "Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz")
@@ -169,23 +169,21 @@ R.utils::gunzip("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz"
 makeblastdb("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa", dbtype="nucl", "-parse_seqids")
 ```
 # Question2
-We use download.file to download the sample fasta sequence. Then, we use seqinr::read.fasta to read them in. We use the command [] to choose our interest sequence (number 1). After that, we use getLength() and seqinr::GC() to determine the length and the proportion of GC bases respectively. Finally, we use cat() to show the results. 
+We use download.file to download the sample fasta sequence. Then, we use seqinr::read.fasta to read them in. We use the command [] to choose our interest sequence (number 1). After that, we use getLength() and seqinr::GC() to determine the length and the proportion of GC bases respectively. Finally, we use cat() to show the results. The length of my selected sequence is 615. The proportion of GC bases is 0.5560976
 ```{r Q2Part2}
 # Download the sample fasta sequences
 download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part2_files/sample.fa",
               destfile = "sample.fa")
 # Read the sequences
 SEQ <- seqinr::read.fasta("sample.fa")
-str(SEQ)
 # Select one sequence
 my_seq <- SEQ[[1]]
 # The length of my selected sequence
-seqinr::getLength(my_seq)
-
+length_seq <- seqinr::getLength(my_seq)
 # The proportion of GC bases
 seqinr::GC(my_seq)
 # Show the results
-cat(" The length of my selected sequence is", seqinr::getLength(my_seq))
+cat(" The length of my selected sequence is", length_seq)
 cat("The proportion of GC bases is", seqinr::GC(my_seq))
 ```
 ## Question 3
@@ -204,27 +202,22 @@ head(res, 3)[, c("qseqid", "sseqid", "pident", "evalue","bitscore")]
 ## Question 4
 We use mutator() function to create mutated sequence with 100 point mutations and then compare with the original sequence by making a pairwise alignment by pairwiseAlignment from Biostrings library. Firstly, we read in my selected sequence. Then, we create a mutated copy with 100 substitutions. After that, we use DNAString() to convert to biostring. We use mmismatch() to get the number of mismatch. Finally, we show the result by using cat(). The number of mismatches between the original and mutated sequence is 80.
 ```{r Q4Part2}
-mutator
 # Read in
 tophit <- seqinr::read.fasta("sample.fa")
 tophit <- tophit[[1]]
 str(tophit)
-
 # Mutate
 tophit_mut <- mutator(myseq = tophit, nmut = 100)
-
 ## Perform pairwise alignment to prove that the mutation has worked as expected
 # Convert to biostring
 tophit_f <- DNAString(c2s(tophit))
 tophit_mut_f <- DNAString(c2s(tophit_mut))
 aln <- Biostrings::pairwiseAlignment(tophit_f,tophit_mut_f)
 pid(aln)
-
-cat("The proportion of matched identity is", pid(aln)) 
 # Get the number of mismatch
  nmismatch(aln)
 # Show the result
- cat("The number of mismatches between the original and mutated sequence is", nmismatch(aln))
+cat("The number of mismatches between the original and mutated sequence is", nmismatch(aln))
 ```
 ## Question 5
 To determine the number and proportion of sites that need to be altered to prevent the BLAST search from matching the gene of origin we can 
@@ -271,6 +264,30 @@ replicator_function<-function(NMUT){
 myresult<-sapply(n_mut_range, replicator_function)
 
 myresult
+
+#Daisy 
+# Create function for BLAST search for a mutated sequence
+matching <- function(nmut) {
+  db_path <- "Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa"
+  mutated_seq <- mutator(myseq = tophit, nmut)
+  mut_char <- seqinr::c2s(mutated_seq)
+  mat_table <- myblastn_tab(mut_char, db_path)
+  num_match <- dim(mat_table)[1]
+  if(is.null(num_match)) {
+    return(0)
+  }else{
+      return(1)
+    }
+}
+probability <- c()
+for (nmut in 1:length_seq) {
+  prob <- mean(replicate(100, matching(nmut)))
+  probability[nmut] <- prob
+}
+numb_mutation <- seq(1:length_seq)
+prevent_search <- which(probability == 0)[1]
+
+
 ```
 # Question 6
 
