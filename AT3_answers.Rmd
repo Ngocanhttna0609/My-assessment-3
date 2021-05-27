@@ -1,6 +1,6 @@
 ---
 title: "Assignment_3_answers"
-author: 'Jasmine Catague, Daisy Ta, Mihiravi Arachchige '
+author: 'Jasmine Catague, Daisy Ta, Mihiravi Arachchige (ST ID:220045141)'
 date: "21/05/2021"
 output:
   html_document: default
