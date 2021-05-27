@@ -1,6 +1,6 @@
 ---
-title: "Assignment_3_answers"
-author: 'Jasmine Catague, Daisy Ta, Mihiravi Arachchige (ST ID:220045141)'
+title: "SLE712_Assignment_3"
+author: 'Jasmine Catague (Student ID:), Daisy Ta (Student ID: 219495475), Mihiravi Arachchige (Student ID: 220045141)'
 date: "21/05/2021"
 output:
   html_document: default
@@ -10,6 +10,7 @@ output:
 
 # PART 1: Importing files, data wrangling, plots and saving code on GitHub
 Repository link for our assignment 3: https://github.com/Ngocanhttna0609/Our-SLE712-Assessment3/tree/main
+
 ## Question 1
 Here is the downloaded file from github gene_expression2.tsv dataset containing the RNA-seq count data for two samples of interest. Firstly, we download the file by using the download.file command and then using the destfile command to label the file in our folder. To read the gene_expression2.tsv we use read.table command selecting the "gene_expression.tsv" file and then using the command header=TRUE to read files with the labels in the first row. After that, we use [] to access a gene by a gene name. Finally, we output the first six rows using [1:6,].
 
