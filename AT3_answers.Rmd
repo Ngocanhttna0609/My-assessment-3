@@ -7,14 +7,12 @@ output: html_document
 
 
 # PART 1: Importing files, data wrangling, plots and saving code on GitHub
-
+Repository link for our assignment 3: https://github.com/Ngocanhttna0609/Our-SLE712-Assessment3/tree/main
 ## Question 1
 Here is the downloaded file from github gene_expression2.tsv dataset containing the RNA-seq count data for two samples of interest. Firstly, we download the file by using the download.file command and then using the destfile command to label the file in our folder. To read the gene_expression2.tsv we use read.table command selecting the "gene_expression.tsv" file and then using the command header=TRUE to read files with the labels in the first row. After that, we use [] to access a gene by a gene name. Finally, we output the first six rows using [1:6,].
 
 ``` {r gene_expression.tsv}
-
-# Download the file gene_expression(.)tsv
-
+# Download the file gene_expression.tsv
 download.file ("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part1_files/gene_expression.tsv", 
   destfile= "gene_expression.tsv")
 # Read in the file
