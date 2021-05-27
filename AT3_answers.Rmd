@@ -287,7 +287,7 @@ plot(x,y,
 
 ```
 
-For reproducability session info is added at the end
+For reproducibility, session info is added at the end
 ```{r session Info}
 sessionInfo()
 ```
