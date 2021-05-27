@@ -253,7 +253,7 @@ rep_mut<-function(NMUT){
   as.numeric(!is.null(res))
 }
 
-replicate(n=150, rep_mut(200))
+replicate(n=200, rep_mut(200))
 
 #The sites that we have changed for our 615 bp sequence.
 n_mut_range<-c(0,60,120,180,240)
@@ -269,20 +269,23 @@ myresult
 ```
 # Question 6
 
-Now we can construct the increasing proportion of mutated bases by the decreasing the ability for BLAST to match the gene sequence of origin. In here, we can conclude that from the orginal sequence that is 615 bp 20% of randomised bases in the total sequence have started to drop and 40% of the randomised bases gave us 0% successful BLAST. 
+Now we can construct the increasing proportion of mutated bases by the decreasing the ability for BLAST to match the gene sequence of origin. In here, we can conclude that from the orginal sequence that is 615 bp 20% of randomised bases in the total sequence have 69% success matches with BLAST but with 40% of the randomised bases gave us 0% successful BLAST. This highlights the limitations of BLASTs to give successful matches when sites in the sequence are randomised we can say that about 30-40% randomised bases BLAST becomes unsuccesful. 
 ```{r, chart}
-#To create a chart we can make a scatterplot.
+#To create a chart we can make a scatterplot of the proportions of sites and succesful BLASTs.
 
 #The proportion of sites randomised from the total sequence length of 615 bp, 150 repeats using gene 1.
-x<-c(0,0.1,0.2,0.3,0.4)
 
-#The proportion of successful BLASTs
-y<-c(1.00, 1.00, 0.66, 0.13, 0.00)
+proportion_plot<-n_mut_range/length_seq
 
-plot(x,y, 
-     main="The effect of increasing proportion of random bases in BLAST", 
-     xlab="proportion of sites randomised", 
-     ylab="proportion of succesful BLASTs")
+#The proportion of successful BLASTs from the previous result
+prop_blast<-c(myresult)
+
+plot(proportion_plot,prop_blast, 
+     type='l', 
+     main="The effect of increasing proportion of random bases in BLAST",
+     xlab="proportion of sites randomised",
+     ylab="proportion of succesful BLASTs"
+     )
 
 ```
 
