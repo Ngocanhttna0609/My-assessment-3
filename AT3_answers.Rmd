@@ -220,7 +220,7 @@ pid(aln)
 cat("The number of mismatches between the original and mutated sequence is", nmismatch(aln))
 ```
 ## Question 5
-Firstly, we have to write the blast index first using makeblastdb. Then, to determine the number and proportion of sites that need to be altered to prevent the BLAST search from matching the gene of origin we can set a number of mutations in the sequences first by using the mutator command.With this we have trial and error with different values and 200 mutaions gave us a null result meaning there is no more matches from BLAST.To find the proportion of sites in the sequence we can use the replicate command. This enables us to set a number of replicates giving proportions of successful BLASTs by increasing number of random bases. Then using 150 replicates choosing random sites of mutation in the sequence we used the sapply command performing the function command which gives an output in vector. In return, this gave us the proportion of successful BLASTs in the chosen sites in the sequence.
+Firstly, we have to write the blast index first using makeblastdb. Then, to determine the number and proportion of sites that need to be altered to prevent the BLAST search from matching the gene of origin we can set a number of mutations in the sequences first by using the mutator command.With this we have trial and error with different values and 200 mutaions gave us a null result meaning there is no more matches from BLAST.To find the proportion of sites in the sequence we can use the replicate command. This enables us to set a number of replicates giving proportions of successful BLASTs by increasing number of random bases. Then using 200 replicates choosing random sites of mutation in the sequence we used the sapply command performing the function command which gives an output in vector. In return, this gave us the proportion of successful BLASTs in the chosen sites in the sequence.
 ```{r Q5Part2}
 
 #We need to write the blast index first
@@ -268,7 +268,7 @@ myresult
 ```
 # Question 6
 
-Now we can construct the increasing proportion of mutated bases by the decreasing the ability for BLAST to match the gene sequence of origin. In here, we can conclude that from the orginal sequence that is 615 bp 20% of randomised bases in the total sequence have 69% success matches with BLAST but with 40% of the randomised bases gave us 0% successful BLAST. This highlights the limitations of BLASTs to give successful matches when sites in the sequence are randomised we can say that about 30-40% randomised bases BLAST becomes unsuccesful. 
+Now we can construct the increasing proportion of mutated bases by the decreasing the ability for BLAST to match the gene sequence of origin. In here, we can conclude that from the orginal sequence with a length of 615 bp with 20% of randomised bases in the total sequence have 69% success matches with BLAST but increasing to 40% of the randomised bases gave us 0% successful BLAST. This highlights the limitations of BLASTs to give successful matches when sites in the sequence are randomised we can say that about 30-40% randomised bases BLAST becomes unsuccesful. 
 ```{r, chart}
 #To create a chart we can make a scatterplot of the proportions of sites and succesful BLASTs.
 
