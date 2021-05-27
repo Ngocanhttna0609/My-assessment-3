@@ -258,7 +258,7 @@ replicate(n=200, rep_mut(200))
 n_mut_range<-c(0,60,120,180,240)
 
 replicator_function<-function(NMUT){
-  mean(replicate(n=150,rep_mut(NMUT)))
+  mean(replicate(n=200,rep_mut(NMUT)))
 }
 
 myresult<-sapply(n_mut_range, replicator_function)
@@ -272,14 +272,14 @@ Now we can construct the increasing proportion of mutated bases by the decreasin
 ```{r, chart}
 #To create a chart we can make a scatterplot of the proportions of sites and succesful BLASTs.
 
-#The proportion of sites randomised from the total sequence length of 615 bp, 150 repeats using gene 1.
+#The proportion of sites randomised from the total sequence length of 615 bp, 200 repeats using gene 1.
 
-proportion_plot<-n_mut_range/length_seq
+prop_seq<-n_mut_range/length_seq
 
 #The proportion of successful BLASTs from the previous result
 prop_blast<-c(myresult)
 
-plot(proportion_plot,prop_blast, 
+plot(prop_seq,prop_blast, 
      type='l', 
      main="The effect of increasing proportion of random bases in BLAST",
      xlab="proportion of sites randomised",
