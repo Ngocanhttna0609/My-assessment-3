@@ -280,7 +280,7 @@ prop_seq<-n_mut_range/length_seq
 prop_blast<-c(myresult)
 
 plot(prop_seq,prop_blast, 
-     type='l', 
+     type='b', 
      main="The effect of increasing proportion of random bases in BLAST",
      xlab="proportion of sites randomised",
      ylab="proportion of succesful BLASTs"
