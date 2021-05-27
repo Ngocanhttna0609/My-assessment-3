@@ -1,6 +1,6 @@
 ---
 title: "SLE712_Assignment_3"
-author: 'Jasmine Catague (Student ID:), Daisy Ta (Student ID: 219495475), Mihiravi Arachchige (Student ID: 220045141)'
+author: 'Jasmine Catague (Student ID:220525798), Daisy Ta (Student ID: 219495475), Mihiravi Arachchige (Student ID: 220045141)'
 date: "21/05/2021"
 output:
   html_document: default
