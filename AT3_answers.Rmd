@@ -21,9 +21,9 @@ download.file ("https://raw.githubusercontent.com/markziemann/SLE712_files/maste
 gene_exp <- read.table("gene_expression.tsv", header=TRUE, row.names=1)
 str(gene_exp)
 # An example of trying to access a gene by gene name
-gene_expression["ENSG00000227232", ]
+gene_exp["ENSG00000227232", ]
 # a table of values for the first six genes.
-gene_expression[1:6,]
+gene_exp[1:6,]
 ```
 
 ## Question 2 
@@ -246,6 +246,7 @@ res
 
 cat("The result for any matches of the mutated sequence is",!is.null(res) )
 
+#To find the proportion of sites in the sequence we can use the rep command 
 rep_mut<-function(NMUT){
   tophit_mut<-mutator(myseq=tophit,nmut=NMUT)
   res<-myblastn_tab(myseq=tophit_mut,db="sample.fa")
@@ -255,7 +256,7 @@ rep_mut<-function(NMUT){
 replicate(n=100, rep_mut(200))
 
 #The sites that we have changed for our 650bp sequence.
-n_mut_range<-c(0,30,50,80,110,140,170,200)
+n_mut_range<-c(0,30,50,80,110,140,170,200,230)
 
 replicator_function<-function(NMUT){
   mean(replicate(n=100,rep_mut(NMUT)))
@@ -295,18 +296,17 @@ Now we can construct the increasing proportion of mutated bases which reduces th
 ```{r, chart}
 #To create a chart we can make a scatterplot.
 
-#The proportion of sites randomised from the total sequence length of 650bp
-x<-c(0,0.04,0.07,0.12,0.16,0.21,0.26,0.31)
+#The proportion of sites randomised from the total sequence length of 650bp, 100 repeats using gene 1.
+x<-c(0,0.04,0.07,0.12,0.16,0.21,0.26,0.31,0.35)
 
   #The proportion of successful BLASTs
-y<-c(1.00, 0.99, 0.70, 0.45, 0.19, 0.04)
+y<-c(1.00, 1.00, 1.00, 0.98, 0.74, 0.40, 0.18, 0.03, 0.01)
 
 plot(x,y, 
-     main="The effect of increasing number of random bases in BLAST", 
+     main="The effect of increasing proportion of random bases in BLAST", 
      xlab="proportion of sites randomised", 
      ylab="proportion of succesful BLASTs")
 
-abline(lm(y~x),col="read")
 ```
 
 
