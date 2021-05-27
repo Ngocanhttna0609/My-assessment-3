@@ -1,8 +1,10 @@
 ---
 title: "Assignment_3_answers"
-author: "Jasmine Catague, Daisy Ta, Mihiravi Arachchige "
+author: 'Jasmine Catague, Daisy Ta, Mihiravi Arachchige '
 date: "21/05/2021"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 
@@ -61,8 +63,8 @@ To create a histogram we use the hist command.
 ```{r, histogram of means}
 hist(gene_exp$mean, main= "The histogram of the mean values of the gene expressions", xlab="Mean values", col="yellow")
 ```
-## Question 6 
 
+## Question 6 
 Firstly, we download the growth_data2.csv by using the download.file command and then destfile command to save the file in the folder.To read the file we use the read.csv command and then use header=TRUE to read files with the labels in the first row. Then use the stringsAsFactors=FALSE command to re-encode strings. We use str and head command to make sure the data has been successful imported. Finally, we use colnames command to get the column names. 
 ```{r,growth dataset}
 download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part1_files/growth_data.csv", 
@@ -127,7 +129,7 @@ cat("The mean growth over the past 10 years of Southwest is", sw_mean_growth)
 ```
 
 ## Question 10
-We get the growth values of tree circumference on each site by using $. Then, we use t.test() and wilcox.test() to run t.test and wilcox.test before getting the p-value. We use cat() command to show the result. The p-value of t.test is 1.712524e-06 and p-value of wilcox.test is 4.6264e-06.
+We get the growth values of tree circumference on each site by using $. Then, we use t.test() and wilcox.test() to run t.test and wilcox.test before getting the p-value. We use cat() command to show the result. The p-value of t.test is 1.712524e-06 and p-value of wilcox.test is 4.6264e-06 which are both p<0.01, meaning they are statistically significant at the level of 1%.
 ```{r, ttest}
 #get the growth values of each site
 na_growth <- northeast$Circumf_2019_cm - northeast$Circumf_2009_cm
@@ -220,87 +222,63 @@ pid(aln)
 cat("The number of mismatches between the original and mutated sequence is", nmismatch(aln))
 ```
 ## Question 5
-To determine the number and proportion of sites that need to be altered to prevent the BLAST search from matching the gene of origin we can 
+Firstly, we have to write the blast index first using makeblastdb. Then, to determine the number and proportion of sites that need to be altered to prevent the BLAST search from matching the gene of origin we can set a number of mutations in the sequences first by using the mutator command.With this we have trial and error with different values and 200 mutaions gave us a null result meaning there is no more matches from BLAST.To find the proportion of sites in the sequence we can use the replicate command. This enables us to set a number of replicates giving proportions of successful BLASTs by increasing number of random bases. Then using 150 replicates choosing random sites of mutation in the sequence we used the sapply command performing the function command which gives an output in vector. In return, this gave us the proportion of successful BLASTs in the chosen sites in the sequence.
 ```{r Q5Part2}
 
 #We need to write the blast index first
 makeblastdb(file="sample.fa", dbtype="nucl")
 
-#From the previous data we know that we have 81 mismatches so we can test with 81 mismatches
-tophit_mut<-mutator(myseq=tophit,nmut=81)
+#We can test a random number of mutations first and see whether we can get any matches from BLAST.
+tophit_mut<-mutator(myseq=tophit,nmut=80)
 
 res<-myblastn_tab(myseq=tophit_mut,db="sample.fa")
 res
 
+#We got matches when we tried to put 80 mutations. Hence, 
 !is.null(res)
-
 cat("The result for any matches of the mutated sequence is",!is.null(res) )
 
-#Now we increase the number of mutations to see whether we can still find matches.
+#We must increase the number of mutations to see whether we can still find matches in the BLAST. So now lets increase it by 200.
 tophit_mut<-mutator(myseq=tophit,nmut=200)
 
 res<-myblastn_tab(myseq=tophit_mut,db="sample.fa")
 res
 
 !is.null(res)
-
 cat("The result for any matches of the mutated sequence is",!is.null(res) )
 
-#To find the proportion of sites in the sequence we can use the rep command 
+#To find the proportion of sites in the sequence we can use the replicate command.
 rep_mut<-function(NMUT){
   tophit_mut<-mutator(myseq=tophit,nmut=NMUT)
   res<-myblastn_tab(myseq=tophit_mut,db="sample.fa")
   as.numeric(!is.null(res))
 }
 
-replicate(n=100, rep_mut(200))
+replicate(n=150, rep_mut(200))
 
-#The sites that we have changed for our 650bp sequence.
-n_mut_range<-c(0,30,50,80,110,140,170,200,230)
+#The sites that we have changed for our 615 bp sequence.
+n_mut_range<-c(0,60,120,180,240)
 
 replicator_function<-function(NMUT){
-  mean(replicate(n=100,rep_mut(NMUT)))
+  mean(replicate(n=150,rep_mut(NMUT)))
 }
 
 myresult<-sapply(n_mut_range, replicator_function)
 
 myresult
 
-#Daisy 
-# Create function for BLAST search for a mutated sequence
-matching <- function(nmut) {
-  db_path <- "Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa"
-  mutated_seq <- mutator(myseq = tophit, nmut)
-  mut_char <- seqinr::c2s(mutated_seq)
-  mat_table <- myblastn_tab(mut_char, db_path)
-  num_match <- dim(mat_table)[1]
-  if(is.null(num_match)) {
-    return(0)
-  }else{
-      return(1)
-    }
-}
-probability <- c()
-for (nmut in 1:length_seq) {
-  prob <- mean(replicate(100, matching(nmut)))
-  probability[nmut] <- prob
-}
-numb_mutation <- seq(1:length_seq)
-prevent_search <- which(probability == 0)[1]
-
-
 ```
 # Question 6
 
-Now we can construct the increasing proportion of mutated bases which reduces the ability for BLAST to match the gene origin.
+Now we can construct the increasing proportion of mutated bases by the decreasing the ability for BLAST to match the gene sequence of origin. In here, we can conclude that from the orginal sequence that is 615 bp 20% of randomised bases in the total sequence have started to drop and 40% of the randomised bases gave us 0% successful BLAST. 
 ```{r, chart}
 #To create a chart we can make a scatterplot.
 
-#The proportion of sites randomised from the total sequence length of 650bp, 100 repeats using gene 1.
-x<-c(0,0.04,0.07,0.12,0.16,0.21,0.26,0.31,0.35)
+#The proportion of sites randomised from the total sequence length of 615 bp, 150 repeats using gene 1.
+x<-c(0,0.1,0.2,0.3,0.4)
 
-  #The proportion of successful BLASTs
-y<-c(1.00, 1.00, 1.00, 0.98, 0.74, 0.40, 0.18, 0.03, 0.01)
+#The proportion of successful BLASTs
+y<-c(1.00, 1.00, 0.66, 0.13, 0.00)
 
 plot(x,y, 
      main="The effect of increasing proportion of random bases in BLAST", 
