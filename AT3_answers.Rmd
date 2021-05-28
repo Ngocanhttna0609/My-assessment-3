@@ -38,7 +38,7 @@ gene_exp$mean<-c(mean_row)
 gene_exp[1:6,]
 ```
 ## Question 3 
-Firstly, we use the order command to sort the genes but this gives us the lowest to highest mean values of the genes. So then, we use the tail command which selects the last rows of the data set which corresponds to the top 10 highest gene expressions.
+We use the order command to sort the genes first but this gives us the lowest to highest mean values of the genes. So then, we use the tail command which selects the last rows of the data set which corresponds to the top 10 highest gene expressions.
 ```{r, highest mean exp}
 # Create sorted data frame from the ordered mean column
 sorted_gene_exp<-gene_exp[order(gene_exp$mean),]
@@ -57,13 +57,13 @@ number_genes
 cat("The number of genes with a mean of < 10 is", number_genes)
 ```
 ## Question 5 
-To create a histogram we use the hist command. 
+To create a histogram of the mean values we use the hist command. Then, to label the histogram main= title of the histogram, xlab=to label the x-axis and then ylab= to label the y-axis.
 ```{r, histogram of means}
 hist(gene_exp$mean, main= "The histogram of the mean values of the gene expressions", xlab="Mean values", col="yellow")
 ```
 
 ## Question 6 
-Firstly, we download the growth_data2.csv by using the download.file command and then destfile command to save the file in the folder.To read the file we use the read.csv command and then use header=TRUE to read files with the labels in the first row. Then use the stringsAsFactors=FALSE command to re-encode strings. We use str and head command to make sure the data has been successful imported. Finally, we use colnames command to get the column names. 
+We download the growth_data2.csv by using the download.file command and then destfile command to save the file in the folder.To read the file we use the read.csv command and then use header=TRUE to read files with the labels in the first row. Then use the stringsAsFactors=FALSE command to re-encode strings. We use str and head command to make sure the data has been successful imported. Finally, we use colnames command to get the column names. 
 ```{r,growth dataset}
 download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part1_files/growth_data.csv", 
               destfile = "growth_data2.csv")
@@ -76,7 +76,7 @@ colnames(growth_data)
 ```
 
 ## Question 7
-We use the mean and sd command to calculate mean and standard deviation of tree circumference respectively in 2004 and 2019. Then, we use the cat command to show the results. Mean and sd of tree circumference in 2004 are 5.077 and 1.054462 respectively. Mean and sd of tree circumference in 2019 are 49.912 and 22.17979 respectively
+We use the mean and sd command to calculate mean and standard deviation of tree circumference respectively in 2004 and 2019. Then, we use the cat command to show the results. Mean and sd of tree circumference in 2004 are 5.077 and 1.054462 respectively. Mean and sd of tree circumference in 2019 are 49.912 and 22.17979, respectively.
 ```{r, mean and sd }
 #The mean and standard deviation of tree circumference at the start (in 2004)
 mean_2004 <- mean(growth_data$Circumf_2004_cm)
@@ -92,7 +92,7 @@ cat("SD in 2019 is", sd_2019)
 ```
 
 ## Question 8 
-Firstly, we get the tree circumference in 2004 and 2019 by using $ sign. Then, we use boxplot to make a box plot of tree circumference at the start and end of the study at both sites. The name of the box plot is "Box plot of tree circumference". 
+Firstly, we get the tree circumference in 2004 and 2019 by using $ sign. Then, we use boxplot command to make a box plot of tree circumference at the start and end of the study at both sites.  Then, to label the boxplot we used main for the title of the histogram, xlab=to label the x-axis and then ylab= to label the y-axis.
 ```{r, boxplot of tree circumference}
 # Get the tree circumference in 2004 and 20009
 x_vals <- growth_data$Circumf_2004_cm
@@ -109,7 +109,7 @@ col = "orange"
 
 
 ## Question 9
-Firstly, we get the tree circumference values of each site by using subset(). Then, we use mean command to calculate the mean values in 2009 and 2019 of each site before calculate. The mean growth over the past 10 years of Northeast and Southwest are 30.076 and 48.354 respectively.
+Firstly, we get the tree circumference values of each site by using subset() command selecting the sites. Then, we use mean command to calculate the mean values in 2009 and 2019 of each site before we calculate the mean growth. The mean growth over the past 10 years of Northeast and Southwest are 30.076cm and 48.354cm respectively.
 ```{r, mean growth}
 # Get the tree circumference values of each site
 northeast <- subset(growth_data, Site=="northeast")
@@ -169,7 +169,7 @@ R.utils::gunzip("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz"
 makeblastdb("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa", dbtype="nucl", "-parse_seqids")
 ```
 # Question2
-We use download.file to download the sample fasta sequence. Then, we use seqinr::read.fasta to read them in. We use the command [] to choose our interest sequence (number 1). After that, we use getLength() and seqinr::GC() to determine the length and the proportion of GC bases respectively. Finally, we use cat() to show the results. The length of my selected sequence is 615. The proportion of GC bases is 0.5560976
+We use download.file to download the sample fasta sequence. Then, we use seqinr::read.fasta to read them in. We use the command [] to choose our sequence of interest (number 1). After that, we use getLength() and seqinr::GC() to determine the length and the proportion of GC bases, respectively. Finally, we use cat() to show the results. The length of my selected sequence is 615. The proportion of GC bases in the sequence is about 55.6%.
 ```{r Q2Part2}
 # Download the sample fasta sequences
 download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/assessment_task3/bioinfo_asst3_part2_files/sample.fa",
@@ -187,7 +187,7 @@ cat(" The length of my selected sequence is", length_seq)
 cat("The proportion of GC bases is", seqinr::GC(my_seq))
 ```
 ## Question 3
-We use myblastn_tab to perform BLAST search. Then, the str command is used to see the structure. After that, we as as.character to identify what E.coli gene my sequence matches best. There is one sequence meet the demand because this gene does not share any matches with any other genes in the database.
+We use myblastn_tab to perform BLAST search. Then, using the str command to see the structure of the dataset. After that, we used as.character to identify which E.coli genes matches with the sequence of interest best. There is only one sequence that meets the demand because this gene does not share any matches with any other genes in the database.
 ```{r Q3Part2}
 # Create BLAST databases and perform BLAST searches
 myblastn_tab
@@ -200,7 +200,7 @@ top_hits
 head(res, 3)[, c("qseqid", "sseqid", "pident", "evalue","bitscore")]
 ```
 ## Question 4
-We use mutator() function to create mutated sequence with 100 point mutations and then compare with the original sequence by making a pairwise alignment by pairwiseAlignment from Biostrings library. Firstly, we read in my selected sequence. Then, we create a mutated copy with 100 substitutions. After that, we use DNAString() to convert to biostring. We use mmismatch() to get the number of mismatch. Finally, we show the result by using cat(). The number of mismatches between the original and mutated sequence is shown below
+We use mutator() function to create mutated sequence with 100 point mutations and then compare with the original sequence by making a pairwise alignment by pairwiseAlignment from Biostrings library. Firstly, we read in my selected sequence. Then, we create a mutated copy with 100 substitutions. After that, we use DNAString() to convert to biostring. We use mmismatch() to get the number of mismatches. Finally, we show the result by using cat(). The number of mismatches between the original and mutated sequence is shown below.
 ```{r Q4Part2}
 # Read in
 tophit <- seqinr::read.fasta("sample.fa")
