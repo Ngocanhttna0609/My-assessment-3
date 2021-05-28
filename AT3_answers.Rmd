@@ -265,7 +265,7 @@ myresult
 ```
 # Question 6
 
-Now we can construct a chart of the increasing proportion of mutated bases by the decreasing proportion of succesful BLASTs to match the gene sequence. In here, we can conclude that from the orginal sequence with a length of 615 bp with 20% of randomised bases in the total sequence we have 69% success matches with BLAST but increasing to 40% of the randomised bases gave us 0% successful BLAST. This highlights the limitations of BLASTs to give successful matches when sites in the sequence are randomised we can say that about 30-40% randomised bases BLAST becomes unsuccesful. 
+Now we can construct a chart of the increasing proportion of mutated bases by the decreasing proportion of succesful BLASTs to match the gene sequence. In here, we can conclude that from the orginal sequence with a length of 615 bp with 40% of the randomised bases gave us 0% successful BLAST. This highlights the limitations of BLASTs to give successful matches when sites in the sequence are randomised we can say that about 30-40% randomised bases BLAST becomes unsuccesful. 
 ```{r, chart}
 #To create a chart we can make a scatterplot of the proportions of sites and succesful BLASTs.
 
