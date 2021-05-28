@@ -282,10 +282,6 @@ plot(prop_seq,prop_blast,
      xlab="proportion of sites randomised",
      ylab="proportion of succesful BLASTs"
      )
-
-number_mutation <- seq(1:length_seq)
-proportion_plot <- number_mutation / length_seq
-plot(propotion_plot, type='l', main = "How proportion of site affects BLAST performance", ylab = "proportion of success", xlab = "proportion of site randomised")
 ```
 
 For reproducibility, session info is added at the end
