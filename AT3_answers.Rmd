@@ -260,11 +260,8 @@ n_mut_range<-c(0,60,120,180,240)
 replicator_function<-function(NMUT){
   mean(replicate(n=150,rep_mut(NMUT)))
 }
-
 myresult<-sapply(n_mut_range, replicator_function)
-
 myresult
-
 ```
 # Question 6
 
@@ -283,6 +280,9 @@ plot(x,y,
      xlab="proportion of sites randomised", 
      ylab="proportion of succesful BLASTs")
 
+number_mutation <- seq(1:length_seq)
+proportion_plot <- number_mutation / length_seq
+plot(propotion_plot, type='l', main = "How proportion of site affects BLAST performance", ylab = "proportion of success", xlab = "proportion of site randomised")
 ```
 
 For reproducibility, session info is added at the end
